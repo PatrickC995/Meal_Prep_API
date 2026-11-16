@@ -1,7 +1,9 @@
 package com.example.meal_prep_api;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +18,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button openMealSearchButton =
+                findViewById(R.id.open_meal_search_button);
+
+        openMealSearchButton.setOnClickListener(v -> {
+
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    MealsSearch.class
+            );
+
+            startActivity(intent);
+        });
 
         MealDatabase.databaseExecutor.execute(() -> {
 

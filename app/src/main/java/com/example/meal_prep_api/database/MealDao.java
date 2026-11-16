@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface MealDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMeals(MealEntity... meals);
 
     @Query("SELECT * FROM meals ORDER BY meal")
