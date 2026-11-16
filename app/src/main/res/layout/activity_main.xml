@@ -21,4 +21,11 @@
         android:layout_height="wrap_content"
         android:text="Search for a meal" />
 
+    <Button
+        android:id="@+id/open_local_search_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Saved Meals"
+        android:layout_marginTop="12dp" />
+
 </LinearLayout>

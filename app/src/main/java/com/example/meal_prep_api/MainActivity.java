@@ -32,6 +32,18 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button localSearchButton =
+                findViewById(R.id.open_local_search_button);
+
+        localSearchButton.setOnClickListener(v -> {
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    LocalMealSearch.class
+            );
+
+            startActivity(intent);
+        });
+
         MealDatabase.databaseExecutor.execute(() -> {
 
             MealDatabase database =
