@@ -30,6 +30,7 @@ public class MealsSearch extends AppCompatActivity {
 
     private EditText mealNameInput;
     private Button searchButton;
+    private Button exitButton;
     private TextView statusText;
     private TextView mealDetailsText;
     private ImageView mealImage;
@@ -45,9 +46,12 @@ public class MealsSearch extends AppCompatActivity {
 
         mealNameInput = findViewById(R.id.meal_name_input);
         searchButton = findViewById(R.id.search_button);
+        exitButton = findViewById(R.id.exit_button);
         statusText = findViewById(R.id.status_text);
         mealDetailsText = findViewById(R.id.meal_details_text);
         mealImage = findViewById(R.id.meal_image);
+
+        exitButton.setOnClickListener(v -> finish());
 
         requestQueue = Volley.newRequestQueue(
                 getApplicationContext()
@@ -97,7 +101,7 @@ public class MealsSearch extends AppCompatActivity {
                                 response.optJSONArray("meals");
 
                         // The API found no results.
-                        if (meals == null || meals.length() == 0) {
+                        if (meals == null) {
                             statusText.setText(
                                     "No exact match found. Enter the full meal name."
                             );

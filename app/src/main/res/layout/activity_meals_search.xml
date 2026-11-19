@@ -1,68 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
+    android:padding="24dp"
     tools:context=".MealsSearch">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:text="Search for a meal"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-        <TextView
+    <EditText
+        android:id="@+id/meal_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:minHeight="48dp"
+        android:hint="Enter the full meal name"
+        android:inputType="textCapSentences"
+        android:maxLines="1" />
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Search" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search for a meal"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/meal_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="48dp"
-            android:hint="Enter the full meal name"
-            android:inputType="textCapSentences"
-            android:maxLines="1" />
 
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Search" />
+            <TextView
+                android:id="@+id/status_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:accessibilityLiveRegion="polite"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/status_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:accessibilityLiveRegion="polite"
-            android:textSize="16sp" />
+            <ImageView
+                android:id="@+id/meal_image"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="Meal photograph"
+                android:scaleType="fitCenter"
+                android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/meal_image"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="Meal photograph"
-            android:scaleType="fitCenter"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/meal_details_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:autoLink="web"
+                android:paddingBottom="24dp"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/meal_details_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:autoLink="web"
-            android:paddingBottom="24dp"
-            android:textSize="18sp" />
+        </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Exit" />
+
+</LinearLayout>
