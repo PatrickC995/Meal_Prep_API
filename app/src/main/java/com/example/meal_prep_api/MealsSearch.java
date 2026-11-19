@@ -34,6 +34,8 @@ public class MealsSearch extends AppCompatActivity {
     private TextView statusText;
     private TextView mealDetailsText;
     private ImageView mealImage;
+    private String displayedImageUrl = "";
+    private String submittedName = "";
 
     private RequestQueue requestQueue;
     private MealDatabase database;
@@ -61,13 +63,41 @@ public class MealsSearch extends AppCompatActivity {
                 getApplicationContext()
         );
 
-        searchButton.setOnClickListener(v -> searchMeal());
+        searchButton.setOnClickListener(v ->
+                searchMeal(mealNameInput.getText().toString().trim())
+        );
+
+        if (savedInstanceState != null) {
+            submittedName = savedInstanceState.getString("submittedName", "");
+            String details = savedInstanceState.getString("details", "");
+            boolean busy = savedInstanceState.getBoolean("busy");
+
+            if (busy && details.isEmpty()) {
+                searchMeal(submittedName);
+            } else {
+                mealDetailsText.setText(details);
+                displayedImageUrl = savedInstanceState.getString("imageUrl", "");
+                mealImage.setContentDescription(
+                        savedInstanceState.getCharSequence("imageDescription")
+                );
+
+                if (!displayedImageUrl.isEmpty()) {
+                    loadMealImage(displayedImageUrl);
+                }
+
+                if (busy) {
+                    statusText.setText("Meal found. Check saved meals for the save result.");
+                } else {
+                    statusText.setText(savedInstanceState.getString("status", ""));
+                }
+            }
+        }
     }
 
-    private void searchMeal() {
+    private void searchMeal(String enteredName) {
 
-        String enteredName =
-                mealNameInput.getText().toString().trim();
+        submittedName = enteredName;
+        displayedImageUrl = "";
 
         // Remove the previous result.
         requestQueue.cancelAll("mealSearch");
@@ -187,6 +217,7 @@ public class MealsSearch extends AppCompatActivity {
 
         mealDetailsText.setText(details);
         mealImage.setContentDescription(meal.meal);
+        displayedImageUrl = meal.mealThumb;
 
         if (!meal.mealThumb.isEmpty()) {
             loadMealImage(meal.mealThumb);
@@ -264,6 +295,18 @@ public class MealsSearch extends AppCompatActivity {
         }
 
         return value;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("details", mealDetailsText.getText().toString());
+        outState.putString("status", statusText.getText().toString());
+        outState.putString("imageUrl", displayedImageUrl);
+        outState.putCharSequence("imageDescription", mealImage.getContentDescription());
+        outState.putString("submittedName", submittedName);
+        outState.putBoolean("busy", !searchButton.isEnabled());
     }
 
     @Override
