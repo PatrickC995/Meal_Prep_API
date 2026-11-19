@@ -18,6 +18,7 @@ public class LocalMealSearch extends AppCompatActivity {
     private Button searchButton;
     private Button exitButton;
     private TextView resultsText;
+    private String submittedQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +36,17 @@ public class LocalMealSearch extends AppCompatActivity {
             resultsText.setText(
                     savedInstanceState.getString("localResults", "")
             );
+            if (savedInstanceState.getBoolean("localBusy")) {
+                searchLocalMeals(savedInstanceState.getString("localQuery", ""));
+            }
         }
 
-        searchButton.setOnClickListener(v -> searchLocalMeals());
+        searchButton.setOnClickListener(v -> searchLocalMeals(searchInput.getText().toString().trim()));
     }
 
-    private void searchLocalMeals() {
+    private void searchLocalMeals(String search) {
 
-        String search = searchInput.getText().toString().trim();
+       submittedQuery = search;
 
         if (search.isEmpty()) {
             searchInput.setError("Enter a meal or ingredient");
@@ -129,6 +133,8 @@ public class LocalMealSearch extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean("localBusy", !searchButton.isEnabled());
+        outState.putString("localQuery", submittedQuery);
 
         outState.putString(
                 "localResults",
