@@ -32,6 +32,10 @@ public class MealTitleSearch extends AppCompatActivity {
     private ImageView mealImage;
     private RequestQueue requestQueue;
     private TextView statusText;
+    private JSONArray displayedMeals = new JSONArray();
+    private String selectedTitle = "";
+    private String selectedImageUrl = "";
+    private String pendingQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +52,44 @@ public class MealTitleSearch extends AppCompatActivity {
         exitButton.setOnClickListener(v -> finish());
 
         Button searchButton = findViewById(R.id.search_meal_titles_button);
-        searchButton.setOnClickListener(view -> searchMeals());
+        searchButton.setOnClickListener(view ->
+                searchMeals(titleInput.getText().toString().trim())
+        );
+
+        if (savedInstanceState != null) {
+            String query = savedInstanceState.getString("pendingQuery", "");
+
+            if (!query.isEmpty()) {
+                searchMeals(query);
+            } else {
+                try {
+                    String titles = savedInstanceState.getString("titles", "[]");
+                    displayTitles(new JSONArray(titles));
+                    statusText.setText(savedInstanceState.getString("titleStatus", ""));
+                } catch (org.json.JSONException e) {
+                    statusText.setText("Please search for the meal again.");
+                }
+
+                String title = savedInstanceState.getString("selectedTitle", "");
+                String url = savedInstanceState.getString("selectedImageUrl", "");
+
+                if (!url.isEmpty()) {
+                    showMealImage(title, url);
+                }
+            }
+        }
     }
 
-    private void searchMeals() {
-        String query = titleInput.getText().toString().trim();
+    private void searchMeals(String query) {
 
         if (query.isEmpty()) {
             titleInput.setError("Enter part of a meal title");
             return;
         }
+        pendingQuery = query;
+        displayedMeals = new JSONArray();
+        selectedTitle = "";
+        selectedImageUrl = "";
 
         requestQueue.cancelAll("mealSearch");
         requestQueue.cancelAll("mealImage");
@@ -75,9 +107,16 @@ public class MealTitleSearch extends AppCompatActivity {
                 Request.Method.GET,
                 url,
                 null,
-                response -> displayTitles(response.optJSONArray("meals")),
-                error -> Toast.makeText(this, "Could not search TheMealDB",
-                        Toast.LENGTH_SHORT).show()
+                response -> {
+                    pendingQuery = "";
+                    displayTitles(response.optJSONArray("meals"));
+                },
+                error -> {
+                    pendingQuery = "";
+                    statusText.setText(
+                            "Could not search TheMealDB. Check your internet connection and try again."
+                    );
+                }
         );
 
         request.setTag("mealSearch");
@@ -86,6 +125,7 @@ public class MealTitleSearch extends AppCompatActivity {
     }
 
     private void displayTitles(JSONArray meals) {
+        displayedMeals = new JSONArray();
         if (meals == null || meals.length() == 0) {
             statusText.setText("No matching meals found. Try a different part of the meal title.");
             return;
@@ -99,6 +139,8 @@ public class MealTitleSearch extends AppCompatActivity {
                 continue;
             }
 
+            displayedMeals.put(meal);
+
             String title = meal.optString("strMeal");
             String imageUrl = meal.optString("strMealThumb");
 
@@ -111,6 +153,8 @@ public class MealTitleSearch extends AppCompatActivity {
     }
 
     private void showMealImage(String title, String imageUrl) {
+        selectedTitle = title;
+        selectedImageUrl = imageUrl;
         requestQueue.cancelAll("mealImage");
         mealImage.setImageDrawable(null);
         mealImage.setVisibility(View.GONE);
@@ -132,6 +176,17 @@ public class MealTitleSearch extends AppCompatActivity {
 
         request.setTag("mealImage");
         requestQueue.add(request);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("titles", displayedMeals.toString());
+        outState.putString("selectedTitle", selectedTitle);
+        outState.putString("selectedImageUrl", selectedImageUrl);
+        outState.putString("titleStatus", statusText.getText().toString());
+        outState.putString("pendingQuery", pendingQuery);
     }
 
     @Override
