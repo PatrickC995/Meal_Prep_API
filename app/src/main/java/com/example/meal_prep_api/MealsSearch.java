@@ -133,7 +133,7 @@ public class MealsSearch extends AppCompatActivity {
                         // The API found no results.
                         if (meals == null) {
                             statusText.setText(
-                                    "No exact match found. Enter the full meal name."
+                                    "No meals found. Check the spelling and try again."
                             );
                             searchButton.setEnabled(true);
                             return;
@@ -147,7 +147,7 @@ public class MealsSearch extends AppCompatActivity {
                             String returnedName =
                                     getText(meal, "strMeal");
 
-                            if (returnedName.equalsIgnoreCase(enteredName)) {
+                            if (returnedName.equals(enteredName)) {
 
                                 MealEntity foundMeal = createMeal(meal);
 
