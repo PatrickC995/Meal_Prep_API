@@ -21,6 +21,9 @@
             android:name=".LocalMealSearch"
             android:exported="false" />
         <activity
+            android:name=".MealTitleSearch"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
