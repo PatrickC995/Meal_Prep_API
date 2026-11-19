@@ -16,6 +16,7 @@ public class LocalMealSearch extends AppCompatActivity {
 
     private EditText searchInput;
     private Button searchButton;
+    private Button exitButton;
     private TextView resultsText;
 
     @Override
@@ -25,7 +26,10 @@ public class LocalMealSearch extends AppCompatActivity {
 
         searchInput = findViewById(R.id.local_search_input);
         searchButton = findViewById(R.id.local_search_button);
+        exitButton = findViewById(R.id.exit_button);
         resultsText = findViewById(R.id.local_results_text);
+
+        exitButton.setOnClickListener(v -> finish());
 
         if (savedInstanceState != null) {
             resultsText.setText(
