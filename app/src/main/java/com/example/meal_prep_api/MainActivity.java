@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        findViewById(R.id.open_meal_title_search_button).setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, MealTitleSearch.class);
+            startActivity(intent);
+        });
+
         MealDatabase.databaseExecutor.execute(() -> {
 
             MealDatabase database =

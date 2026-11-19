@@ -28,4 +28,11 @@
         android:text="Search Saved Meals"
         android:layout_marginTop="12dp" />
 
+    <Button
+        android:id="@+id/open_meal_title_search_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search meals by title"
+        android:layout_marginTop="12dp" />
+
 </LinearLayout>
